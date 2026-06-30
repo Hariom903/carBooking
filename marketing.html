@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NextGen Software | Car Booking & E‑Commerce Solutions</title>
+    <!-- Font Awesome 6 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <!-- Swiper CSS for Testimonials -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css">
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --accent: #f97316;
+            --accent-hover: #ea580c;
+            --dark: #0f172a;
+            --gray-50: #f8fafc;
+            --gray-100: #f1f5f9;
+            --gray-200: #e2e8f0;
+            --gray-600: #475569;
+            --gray-800: #1e293b;
+            --white: #ffffff;
+            --shadow: 0 4px 20px rgba(0,0,0,0.08);
+            --shadow-lg: 0 20px 50px rgba(0,0,0,0.1);
+            --radius: 16px;
+        }
+
+        * { margin:0; padding:0; box-sizing:border-box; }
+        html { scroll-behavior:smooth; scroll-padding-top:80px; }
+        body {
+            font-family: 'Inter', sans-serif;
+            color: var(--gray-800);
+            background: var(--white);
+            overflow-x: hidden;
+        }
+
+        /* Navbar */
+        .navbar {
+            position: fixed; top:0; left:0; width:100%; z-index:1000;
+            background: rgba(255,255,255,0.85); backdrop-filter: blur(15px);
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+            transition: 0.3s;
+        }
+        .navbar.scrolled { background: rgba(255,255,255,0.95); box-shadow: var(--shadow); }
+        .nav-container {
+            display: flex; align-items:center; justify-content:space-between;
+            max-width: 1200px; margin:0 auto; padding:1rem 2rem;
+        }
+        .logo {
+            display: flex; align-items:center; gap:10px;
+            text-decoration: none; font-weight:800; font-size:1.5rem; color: var(--dark);
+        }
+        .logo i { color: var(--primary); font-size:2rem; }
+        .nav-links { display:flex; gap:2rem; list-style:none; }
+        .nav-links a {
+            text-decoration: none; color: var(--gray-600);
+            font-weight:500; transition:0.2s;
+        }
+        .nav-links a:hover { color: var(--primary); }
+        .btn {
+            display:inline-flex; align-items:center; gap:0.4rem;
+            padding:0.75rem 1.8rem; border-radius:50px;
+            font-weight:600; text-decoration:none; transition:0.3s;
+            border:2px solid transparent;
+        }
+        .btn-primary { background:var(--primary); color:white; box-shadow:0 8px 24px rgba(37,99,235,0.3); }
+        .btn-primary:hover { background:var(--primary-dark); transform:translateY(-2px); }
+        .btn-outline { border-color:var(--primary); color:var(--primary); }
+        .btn-outline:hover { background:var(--primary); color:white; }
+
+        /* Hero */
+        .hero {
+            padding:8rem 0 4rem;
+            background: linear-gradient(135deg, #f0f9ff 0%, #fff7ed 100%);
+            position: relative; overflow:hidden;
+        }
+        .hero-container {
+            max-width:1200px; margin:0 auto; padding:0 2rem;
+            display:grid; grid-template-columns:1fr 1fr; gap:3rem; align-items:center;
+        }
+        .hero-text h1 {
+            font-size:3.2rem; font-weight:800; line-height:1.2; color:var(--dark);
+        }
+        .hero-text h1 span { background:linear-gradient(to right, var(--primary), var(--accent)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+        .hero-text p { color:var(--gray-600); font-size:1.1rem; margin:1.5rem 0 2rem; }
+        .hero-buttons { display:flex; gap:1rem; flex-wrap:wrap; }
+        .hero-visual { display:flex; justify-content:center; }
+        .hero-visual i { font-size:15rem; color:var(--primary); opacity:0.2; }
+
+        /* Section titles */
+        .section-title {
+            text-align:center; max-width:700px; margin:0 auto 3rem;
+        }
+        .section-title h2 {
+            font-size:2.5rem; font-weight:800; color:var(--dark);
+        }
+        .section-title p { color:var(--gray-600); margin-top:0.5rem; }
+
+        /* Product Cards */
+        .product-grid {
+            display:grid; grid-template-columns:repeat(auto-fit, minmax(350px, 1fr));
+            gap:2rem; max-width:1200px; margin:0 auto; padding:0 2rem;
+        }
+        .product-card {
+            background:white; border-radius:var(--radius);
+            box-shadow:var(--shadow); padding:2rem;
+            border:1px solid var(--gray-200); transition:0.3s;
+        }
+        .product-card:hover { transform:translateY(-8px); box-shadow:var(--shadow-lg); }
+        .product-icon {
+            width:70px; height:70px; border-radius:20px; display:flex;
+            align-items:center; justify-content:center; font-size:2rem;
+            margin-bottom:1.5rem;
+        }
+        .car-icon { background:#eff6ff; color:var(--primary); }
+        .shop-icon { background:#fff7ed; color:var(--accent); }
+        .product-card h3 { font-size:1.5rem; margin-bottom:0.8rem; }
+        .product-card p { color:var(--gray-600); margin-bottom:1.5rem; }
+        .feature-list { list-style:none; margin-bottom:1.5rem; }
+        .feature-list li { display:flex; align-items:center; gap:0.5rem; margin-bottom:0.6rem; font-size:0.95rem; }
+
+        /* Features section */
+        .features-grid {
+            display:grid; grid-template-columns:repeat(auto-fit, minmax(220px,1fr));
+            gap:1.5rem; max-width:1200px; margin:2rem auto; padding:0 2rem;
+        }
+        .feature-item {
+            background:white; padding:2rem 1.5rem; border-radius:var(--radius);
+            box-shadow:var(--shadow); text-align:center; transition:0.3s;
+        }
+        .feature-item i { font-size:2.2rem; color:var(--primary); margin-bottom:1rem; }
+        .feature-item h4 { margin-bottom:0.5rem; }
+
+        /* Testimonials */
+        .swiper { padding:2rem 0 4rem; }
+        .testimonial-card {
+            background:white; padding:2rem; border-radius:var(--radius);
+            box-shadow:var(--shadow); text-align:center; max-width:400px; margin:0 auto;
+        }
+        .testimonial-stars { color:#f59e0b; font-size:1.2rem; margin-bottom:0.8rem; }
+        .testimonial-card p { font-style:italic; color:var(--gray-600); }
+
+        /* Contact */
+        .contact-form {
+            max-width:600px; margin:0 auto;
+            display:grid; grid-template-columns:1fr 1fr; gap:1rem;
+        }
+        .contact-form input, .contact-form textarea {
+            width:100%; padding:1rem; border:2px solid var(--gray-200);
+            border-radius:12px; font-family:inherit; outline:none;
+        }
+        .contact-form textarea { grid-column:span 2; }
+        .contact-form button { grid-column:span 2; }
+
+        /* Footer */
+        footer {
+            background:var(--dark); color:#cbd5e1; padding:3rem 2rem 1.5rem;
+        }
+        .footer-grid {
+            max-width:1200px; margin:0 auto;
+            display:grid; grid-template-columns:repeat(auto-fit, minmax(150px,1fr));
+            gap:2rem; margin-bottom:2rem;
+        }
+        .footer-grid h4 { color:white; margin-bottom:1rem; }
+        .footer-grid a { color:#cbd5e1; text-decoration:none; display:block; margin-bottom:0.5rem; }
+        .social-icons a { font-size:1.3rem; margin-right:0.8rem; color:#cbd5e1; }
+        .bottom { text-align:center; border-top:1px solid #334155; padding-top:1.5rem; font-size:0.9rem; }
+
+        @media (max-width:768px) {
+            .hero-container { grid-template-columns:1fr; text-align:center; }
+            .nav-links { display:none; }
+            .contact-form { grid-template-columns:1fr; }
+            .contact-form textarea, .contact-form button { grid-column:span 1; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+            <a href="#" class="logo"><i class="fa-solid fa-cubes"></i> NextGen<span style="color:var(--primary);">Soft</span></a>
+            <ul class="nav-links">
+                <li><a href="#car">Car Booking</a></li>
+                <li><a href="#shop">E‑Commerce</a></li>
+                <li><a href="#features">Features</a></li>
+                <li><a href="#testimonials">Clients</a></li>
+                <li><a href="#contact">Contact</a></li>
+                <li><a href="#demo" class="btn btn-primary">Book Demo</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero -->
+    <section class="hero">
+        <div class="hero-container">
+            <div class="hero-text">
+                <h1>Powerful Software for <span>Car Rentals</span> & <span>Online Stores</span></h1>
+                <p>Boost your business with our ready‑to‑deploy Car Booking System and full‑featured E‑Commerce Platform. Modern, scalable, and built for growth.</p>
+                <div class="hero-buttons">
+                    <a href="#car" class="btn btn-primary">Explore Car Software <i class="fa-solid fa-arrow-right"></i></a>
+                    <a href="#shop" class="btn btn-outline">Explore Shop Software</a>
+                </div>
+            </div>
+            <div class="hero-visual">
+                <i class="fa-solid fa-laptop-code"></i>
+            </div>
+        </div>
+    </section>
+
+    <!-- Product Showcase: Car Booking -->
+    <section id="car" style="padding:5rem 0;">
+        <div class="section-title">
+            <h2>🚗 Car Booking System</h2>
+            <p>Everything you need to run a modern car rental business.</p>
+        </div>
+        <div class="product-grid">
+            <div class="product-card">
+                <div class="product-icon car-icon"><i class="fa-solid fa-car"></i></div>
+                <h3>DriveLux Rental Suite</h3>
+                <p>A complete SaaS platform for vehicle reservations, fleet management, and customer bookings.</p>
+                <ul class="feature-list">
+                    <li><i class="fa-solid fa-check-circle" style="color:#16a34a;"></i> Online booking engine</li>
+                    <li><i class="fa-solid fa-check-circle" style="color:#16a34a;"></i> Fleet & driver management</li>
+                    <li><i class="fa-solid fa-check-circle" style="color:#16a34a;"></i> Real‑time availability & pricing</li>
+                    <li><i class="fa-solid fa-check-circle" style="color:#16a34a;"></i> Secure payment gateway</li>
+                    <li><i class="fa-solid fa-check-circle" style="color:#16a34a;"></i> Mobile‑friendly & PWA</li>
+                </ul>
+                <a href="#demo" class="btn btn-primary">Request Demo</a>
+            </div>
+            <div class="product-card">
+                <div style="text-align:center; padding:2rem 0; background:#f8fafc; border-radius:12px;">
+                    <i class="fa-solid fa-calendar-check" style="font-size:4rem; color:var(--primary);"></i>
+                    <h4 style="margin-top:1rem;">Seamless Customer Journey</h4>
+                    <p style="color:var(--gray-600);">From search to payment, all in one flow.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Product Showcase: E‑Commerce -->
+    <section id="shop" style="padding:5rem 0; background:var(--gray-50);">
+        <div class="section-title">
+            <h2>🛍️ E‑Commerce Platform</h2>
+            <p>Launch your online store with zero coding – inventory, orders, and payments integrated.</p>
+        </div>
+        <div class="product-grid">
+            <div class="product-card">
+                <div class="product-icon shop-icon"><i class="fa-solid fa-store"></i></div>
+                <h3>ShopLux Commerce</h3>
+                <p>A modern e‑commerce solution with unlimited products, categories, and automated order processing.</p>
+                <ul class="feature-list">
+                    <li><i class="fa-solid fa-check-circle" style="color:#16a34a;"></i> Product management</li>
+                    <li><i class="fa-solid fa-check-circle" style="color:#16a34a;"></i> Shopping cart & checkout</li>
+                    <li><i class="fa-solid fa-check-circle" style="color:#16a34a;"></i> Multi‑vendor support</li>
+                    <li><i class="fa-solid fa-check-circle" style="color:#16a34a;"></i> Discount coupons & offers</li>
+                    <li><i class="fa-solid fa-check-circle" style="color:#16a34a;"></i> Analytics & sales reports</li>
+                </ul>
+                <a href="#demo" class="btn btn-primary" style="background:var(--accent); box-shadow:0 8px 24px rgba(249,115,22,0.3);">Request Demo</a>
+            </div>
+            <div class="product-card">
+                <div style="text-align:center; padding:2rem 0; background:#f8fafc; border-radius:12px;">
+                    <i class="fa-solid fa-chart-line" style="font-size:4rem; color:var(--accent);"></i>
+                    <h4 style="margin-top:1rem;">Grow Your Revenue</h4>
+                    <p style="color:var(--gray-600);">Built‑in SEO, mobile optimisation, and marketing tools.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Common Features -->
+    <section id="features" style="padding:5rem 0;">
+        <div class="section-title">
+            <h2>Why Choose Our Software?</h2>
+        </div>
+        <div class="features-grid">
+            <div class="feature-item">
+                <i class="fa-solid fa-cloud"></i>
+                <h4>Cloud Based</h4>
+                <p>Access from anywhere, no installation needed.</p>
+            </div>
+            <div class="feature-item">
+                <i class="fa-solid fa-shield-haltered"></i>
+                <h4>Secure</h4>
+                <p>SSL encryption, role‑based access, and regular backups.</p>
+            </div>
+            <div class="feature-item">
+                <i class="fa-solid fa-mobile-screen"></i>
+                <h4>Mobile Ready</h4>
+                <p>Fully responsive and PWA supported.</p>
+            </div>
+            <div class="feature-item">
+                <i class="fa-solid fa-headset"></i>
+                <h4>24/7 Support</h4>
+                <p>Dedicated technical assistance.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section id="testimonials" style="padding:5rem 0; background:var(--gray-50);">
+        <div class="section-title"><h2>Trusted by Businesses</h2></div>
+        <div class="swiper" id="testimonialSwiper">
+            <div class="swiper-wrapper">
+                <div class="swiper-slide"><div class="testimonial-card"><div class="testimonial-stars">★★★★★</div><p>"The car booking system doubled our reservations in one month!"</p><strong>— Priya M., Fleet Owner</strong></div></div>
+                <div class="swiper-slide"><div class="testimonial-card"><div class="testimonial-stars">★★★★★</div><p>"ShopLux helped us launch our online store in just two days. Excellent support."</p><strong>— Arjun K., Entrepreneur</strong></div></div>
+                <div class="swiper-slide"><div class="testimonial-card"><div class="testimonial-stars">★★★★★</div><p>"Both platforms are incredibly intuitive. Highly recommended."</p><strong>— Ritu S., Multi‑business Owner</strong></div></div>
+            </div>
+            <div class="swiper-pagination"></div>
+        </div>
+    </section>
+
+    <!-- Contact / Demo Form -->
+    <section id="demo" style="padding:5rem 0;">
+        <div class="section-title">
+            <h2>Book a Free Demo</h2>
+            <p>Tell us your requirements and we'll show you how our software can transform your business.</p>
+        </div>
+        <form id="demoForm" class="contact-form">
+            <input type="text" placeholder="Full Name *" required>
+            <input type="email" placeholder="Email Address *" required>
+            <input type="text" placeholder="Company Name">
+            <input type="tel" placeholder="Mobile Number">
+            <select style="width:100%; padding:1rem; border:2px solid var(--gray-200); border-radius:12px; font-family:inherit;">
+                <option>Interested in</option>
+                <option>Car Booking Software</option>
+                <option>E‑Commerce Software</option>
+                <option>Both</option>
+            </select>
+            <textarea rows="4" placeholder="Message"></textarea>
+            <button type="submit" class="btn btn-primary">Send Request <i class="fa-solid fa-paper-plane"></i></button>
+        </form>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-grid">
+            <div>
+                <h4>NextGenSoft</h4>
+                <p>Car & Shop software solutions for modern businesses.</p>
+            </div>
+            <div>
+                <h4>Products</h4>
+                <a href="#car">Car Booking</a>
+                <a href="#shop">E‑Commerce</a>
+            </div>
+            <div>
+                <h4>Company</h4>
+                <a href="#">About</a>
+                <a href="#">Blog</a>
+                <a href="#">Careers</a>
+            </div>
+            <div>
+                <h4>Support</h4>
+                <a href="#contact">Contact</a>
+                <a href="#">Privacy Policy</a>
+                <a href="#">Terms</a>
+            </div>
+            <div>
+                <h4>Follow Us</h4>
+                <div class="social-icons">
+                    <a href="#"><i class="fa-brands fa-facebook"></i></a>
+                    <a href="#"><i class="fa-brands fa-twitter"></i></a>
+                    <a href="#"><i class="fa-brands fa-linkedin"></i></a>
+                    <a href="#"><i class="fa-brands fa-instagram"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="bottom">© 2026 NextGenSoft. All rights reserved.</div>
+    </footer>
+
+    <!-- Swiper JS -->
+    <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
+    <script>
+        // Navbar scroll effect
+        window.addEventListener('scroll', () => {
+            document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 50);
+        });
+
+        // Initialize Swiper
+        new Swiper('#testimonialSwiper', {
+            slidesPerView: 1,
+            spaceBetween: 24,
+            loop: true,
+            autoplay: { delay: 3000 },
+            pagination: { el: '.swiper-pagination', clickable: true },
+            breakpoints: { 768: { slidesPerView: 2 }, 1024: { slidesPerView: 3 } }
+        });
+
+        // Demo form submission
+        document.getElementById('demoForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            alert('Thank you! Our team will reach out within 24 hours.');
+            this.reset();
+        });
+
+        // Smooth scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) window.scrollTo({ top: target.offsetTop - 80, behavior: 'smooth' });
+            });
+        });
+    </script>
+</body>
+</html>

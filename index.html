@@ -1,0 +1,1722 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DriveLux | Premium Car Booking</title>
+    <!-- Font Awesome 6 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet">
+    <!-- Swiper CSS for Testimonials -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css">
+
+    <style>
+        :root {
+            --primary: #1a1a2e;
+            --primary-light: #16213e;
+            --accent: #c9a84c;
+            --accent-hover: #b8942f;
+            --gold: #d4af37;
+            --white: #ffffff;
+            --gray-100: #f8f9fa;
+            --gray-200: #e9ecef;
+            --gray-300: #dee2e6;
+            --gray-400: #adb5bd;
+            --gray-600: #6c757d;
+            --gray-800: #343a40;
+            --gray-900: #212529;
+            --text-light: #b0b0b0;
+            --text-dark: #1a1a1a;
+            --red: #dc3545;
+            --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.08);
+            --shadow-md: 0 8px 32px rgba(0, 0, 0, 0.12);
+            --shadow-lg: 0 20px 60px rgba(0, 0, 0, 0.18);
+            --shadow-xl: 0 30px 80px rgba(0, 0, 0, 0.25);
+            --radius-sm: 8px;
+            --radius: 12px;
+            --radius-lg: 20px;
+            --radius-xl: 28px;
+            --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-slow: 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            scroll-padding-top: 80px;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #fafafa;
+            color: var(--gray-900);
+            line-height: 1.7;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* ========== PRELOADER ========== */
+        .preloader {
+            position: fixed;
+            inset: 0;
+            background: #0a0a0a;
+            z-index: 99999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 0.6s ease, visibility 0.6s ease;
+        }
+        .preloader.hidden {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+        .preloader .car-loader {
+            font-size: 60px;
+            color: var(--accent);
+            animation: carBounce 0.8s ease-in-out infinite alternate;
+        }
+        @keyframes carBounce {
+            0% {
+                transform: translateY(0) scale(1);
+            }
+            100% {
+                transform: translateY(-25px) scale(1.1);
+            }
+        }
+        .preloader .road-line {
+            width: 120px;
+            height: 3px;
+            background: repeating-linear-gradient(90deg, var(--accent) 0px, var(--accent) 16px, transparent 16px, transparent 28px);
+            animation: roadMove 0.6s linear infinite;
+            margin-top: 16px;
+            border-radius: 2px;
+        }
+        @keyframes roadMove {
+            0% {
+                background-position: 0 0;
+            }
+            100% {
+                background-position: -28px 0;
+            }
+        }
+
+        /* ========== NAVBAR ========== */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+            padding: 18px 0;
+            transition: var(--transition-slow);
+            background: transparent;
+        }
+        .navbar.scrolled {
+            background: rgba(10, 10, 18, 0.95);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            padding: 10px 0;
+            box-shadow: var(--shadow-lg);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+        }
+        .navbar .container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            max-width: 1300px;
+            margin: 0 auto;
+            padding: 0 30px;
+        }
+        .navbar .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+            z-index: 1001;
+        }
+        .navbar .logo-icon {
+            font-size: 36px;
+            color: var(--accent);
+            transition: var(--transition);
+        }
+        .navbar .logo-text {
+            font-family: 'Playfair Display', serif;
+            font-size: 28px;
+            font-weight: 800;
+            color: var(--white);
+            letter-spacing: 1px;
+        }
+        .navbar .logo-text span {
+            color: var(--accent);
+        }
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 36px;
+            list-style: none;
+        }
+        .nav-links a {
+            text-decoration: none;
+            color: rgba(255, 255, 255, 0.85);
+            font-weight: 500;
+            font-size: 15px;
+            letter-spacing: 0.5px;
+            position: relative;
+            transition: var(--transition);
+            padding: 6px 0;
+        }
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--accent);
+            transition: var(--transition);
+            border-radius: 2px;
+        }
+        .nav-links a:hover {
+            color: var(--white);
+        }
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+        .nav-cta {
+            background: var(--accent);
+            color: #0a0a0a !important;
+            padding: 12px 28px !important;
+            border-radius: 50px;
+            font-weight: 600 !important;
+            letter-spacing: 0.5px;
+            transition: var(--transition) !important;
+            font-size: 14px !important;
+        }
+        .nav-cta:hover {
+            background: var(--accent-hover) !important;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(201, 168, 76, 0.35);
+        }
+        .nav-cta::after {
+            display: none !important;
+        }
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+            gap: 6px;
+            z-index: 1001;
+        }
+        .hamburger span {
+            width: 30px;
+            height: 3px;
+            background: var(--white);
+            border-radius: 3px;
+            transition: var(--transition);
+        }
+        .hamburger.active span:nth-child(1) {
+            transform: rotate(45deg) translate(7px, 7px);
+        }
+        .hamburger.active span:nth-child(2) {
+            opacity: 0;
+        }
+        .hamburger.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(7px, -7px);
+        }
+
+        /* ========== HERO SECTION ========== */
+        .hero {
+            position: relative;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #0a0a12 0%, #0d1117 30%, #12121c 60%, #0a0a14 100%);
+            overflow: hidden;
+            padding-top: 60px;
+        }
+        .hero-bg-overlay {
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(ellipse at 30% 50%, rgba(201, 168, 76, 0.08) 0%, transparent 60%),
+                radial-gradient(ellipse at 70% 30%, rgba(180, 140, 60, 0.06) 0%, transparent 55%),
+                radial-gradient(ellipse at 50% 80%, rgba(200, 160, 70, 0.04) 0%, transparent 50%);
+            pointer-events: none;
+        }
+        .hero-particles {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            overflow: hidden;
+        }
+        .hero-particles .particle {
+            position: absolute;
+            background: rgba(201, 168, 76, 0.15);
+            border-radius: 50%;
+            animation: floatUp linear infinite;
+        }
+        @keyframes floatUp {
+            0% {
+                transform: translateY(100vh) scale(0);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-10vh) scale(1.5);
+                opacity: 0;
+            }
+        }
+        .hero .container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+            max-width: 1300px;
+            width: 100%;
+            padding: 40px 30px;
+            position: relative;
+            z-index: 2;
+        }
+        .hero-content h4 {
+            color: var(--accent);
+            font-weight: 600;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            font-size: 14px;
+            margin-bottom: 12px;
+            animation: fadeInUp 0.8s ease forwards;
+        }
+        .hero-content h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(42px, 5.5vw, 68px);
+            font-weight: 800;
+            color: var(--white);
+            line-height: 1.15;
+            margin-bottom: 20px;
+            animation: fadeInUp 0.8s ease 0.15s forwards;
+            opacity: 0;
+        }
+        .hero-content h1 span {
+            color: var(--accent);
+            position: relative;
+        }
+        .hero-content h1 span::after {
+            content: '';
+            position: absolute;
+            bottom: 4px;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: var(--accent);
+            border-radius: 2px;
+            opacity: 0.4;
+        }
+        .hero-content p {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 17px;
+            margin-bottom: 30px;
+            max-width: 480px;
+            animation: fadeInUp 0.8s ease 0.3s forwards;
+            opacity: 0;
+        }
+        .hero-stats {
+            display: flex;
+            gap: 40px;
+            animation: fadeInUp 0.8s ease 0.45s forwards;
+            opacity: 0;
+        }
+        .hero-stat h3 {
+            font-size: 36px;
+            font-weight: 700;
+            color: var(--accent);
+            font-family: 'Playfair Display', serif;
+        }
+        .hero-stat p {
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.55);
+            margin: 0;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Booking Card */
+        .hero-booking-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: var(--radius-xl);
+            padding: 36px 32px;
+            box-shadow: var(--shadow-xl);
+            animation: fadeInUp 0.8s ease 0.2s forwards;
+            opacity: 0;
+        }
+        .hero-booking-card h3 {
+            color: var(--white);
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: 6px;
+            text-align: center;
+        }
+        .hero-booking-card .subtitle {
+            color: rgba(255, 255, 255, 0.55);
+            font-size: 13px;
+            text-align: center;
+            margin-bottom: 24px;
+            letter-spacing: 0.5px;
+        }
+        .booking-form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+            margin-bottom: 14px;
+        }
+        .booking-form-row.full {
+            grid-template-columns: 1fr;
+        }
+        .booking-form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+        .booking-form-group label {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 12px;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+        .booking-form-group input,
+        .booking-form-group select {
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: var(--radius-sm);
+            padding: 13px 16px;
+            color: var(--white);
+            font-family: 'Poppins', sans-serif;
+            font-size: 14px;
+            transition: var(--transition);
+            outline: none;
+            width: 100%;
+        }
+        .booking-form-group input:focus,
+        .booking-form-group select:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(201, 168, 76, 0.1);
+        }
+        .booking-form-group select {
+            appearance: none;
+            -webkit-appearance: none;
+            cursor: pointer;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 16px center;
+        }
+        .booking-form-group select option {
+            background: #1a1a2e;
+            color: #fff;
+        }
+        .btn-book-now {
+            width: 100%;
+            background: var(--accent);
+            color: #0a0a0a;
+            border: none;
+            padding: 15px;
+            border-radius: 50px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            letter-spacing: 1px;
+            transition: var(--transition);
+            font-family: 'Poppins', sans-serif;
+            margin-top: 6px;
+        }
+        .btn-book-now:hover {
+            background: var(--accent-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 12px 30px rgba(201, 168, 76, 0.4);
+        }
+
+        /* ========== SECTION STYLES ========== */
+        .section {
+            padding: 100px 0;
+        }
+        .section-header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+        .section-header .tag {
+            display: inline-block;
+            background: rgba(201, 168, 76, 0.1);
+            color: var(--accent);
+            padding: 8px 20px;
+            border-radius: 50px;
+            font-size: 13px;
+            font-weight: 600;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 16px;
+        }
+        .section-header h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(32px, 4vw, 48px);
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 12px;
+        }
+        .section-header p {
+            color: var(--gray-600);
+            max-width: 600px;
+            margin: 0 auto;
+            font-size: 16px;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 30px;
+        }
+
+        /* ========== ABOUT SECTION ========== */
+        #about {
+            background: var(--white);
+        }
+        .about-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+        }
+        .about-image-wrapper {
+            position: relative;
+        }
+        .about-image {
+            width: 100%;
+            border-radius: var(--radius-lg);
+            object-fit: cover;
+            box-shadow: var(--shadow-lg);
+            aspect-ratio: 4/3;
+            background: linear-gradient(135deg, #1a1a2e 0%, #2a2a3e 50%, #1a1a2e 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 120px;
+            color: var(--accent);
+            position: relative;
+            overflow: hidden;
+        }
+        .about-image::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at 30% 40%, rgba(201, 168, 76, 0.3) 0%, transparent 60%);
+        }
+        .about-image i {
+            position: relative;
+            z-index: 1;
+            filter: drop-shadow(0 10px 30px rgba(0, 0, 0, 0.5));
+        }
+        .about-badge {
+            position: absolute;
+            bottom: -25px;
+            right: -25px;
+            background: var(--accent);
+            color: #0a0a0a;
+            padding: 24px 30px;
+            border-radius: var(--radius-lg);
+            text-align: center;
+            box-shadow: var(--shadow-lg);
+            font-weight: 700;
+        }
+        .about-badge .number {
+            font-size: 40px;
+            font-family: 'Playfair Display', serif;
+            line-height: 1;
+            display: block;
+        }
+        .about-badge .label {
+            font-size: 12px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+        .about-content h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 38px;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 18px;
+            line-height: 1.2;
+        }
+        .about-content h2 span {
+            color: var(--accent);
+        }
+        .about-content p {
+            color: var(--gray-600);
+            margin-bottom: 20px;
+            font-size: 15px;
+        }
+        .about-features {
+            list-style: none;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 28px;
+        }
+        .about-features li {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 500;
+            font-size: 14px;
+            color: var(--gray-800);
+        }
+        .about-features li i {
+            color: var(--accent);
+            font-size: 18px;
+        }
+        .btn-outline {
+            display: inline-block;
+            border: 2px solid var(--accent);
+            color: var(--accent);
+            padding: 13px 32px;
+            border-radius: 50px;
+            font-weight: 600;
+            text-decoration: none;
+            letter-spacing: 0.5px;
+            transition: var(--transition);
+            font-size: 14px;
+        }
+        .btn-outline:hover {
+            background: var(--accent);
+            color: #0a0a0a;
+        }
+
+        /* ========== SERVICES SECTION ========== */
+        #services {
+            background: var(--gray-100);
+        }
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 28px;
+        }
+        .service-card {
+            background: var(--white);
+            border-radius: var(--radius-lg);
+            padding: 36px 28px;
+            text-align: center;
+            box-shadow: var(--shadow-sm);
+            transition: var(--transition-slow);
+            border: 1px solid transparent;
+            position: relative;
+            overflow: hidden;
+        }
+        .service-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--accent);
+            transform: scaleX(0);
+            transform-origin: center;
+            transition: var(--transition-slow);
+            border-radius: 0 0 4px 4px;
+        }
+        .service-card:hover {
+            transform: translateY(-10px);
+            box-shadow: var(--shadow-lg);
+            border-color: rgba(201, 168, 76, 0.2);
+        }
+        .service-card:hover::before {
+            transform: scaleX(1);
+        }
+        .service-icon {
+            width: 70px;
+            height: 70px;
+            background: rgba(201, 168, 76, 0.08);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            font-size: 30px;
+            color: var(--accent);
+            transition: var(--transition);
+        }
+        .service-card:hover .service-icon {
+            background: var(--accent);
+            color: #0a0a0a;
+            transform: rotateY(180deg);
+        }
+        .service-card h3 {
+            font-weight: 600;
+            font-size: 19px;
+            margin-bottom: 10px;
+            color: var(--primary);
+        }
+        .service-card p {
+            color: var(--gray-600);
+            font-size: 14px;
+            line-height: 1.6;
+        }
+        .service-card .price-tag {
+            display: inline-block;
+            margin-top: 16px;
+            background: var(--gray-100);
+            padding: 8px 18px;
+            border-radius: 50px;
+            font-weight: 700;
+            color: var(--accent);
+            font-size: 14px;
+            letter-spacing: 0.5px;
+        }
+
+        /* ========== FEEDBACK / TESTIMONIALS ========== */
+        #feedback {
+            background: var(--primary);
+            position: relative;
+            overflow: hidden;
+        }
+        #feedback::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(ellipse at 20% 50%, rgba(201, 168, 76, 0.05) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 20%, rgba(201, 168, 76, 0.04) 0%, transparent 50%);
+            pointer-events: none;
+        }
+        #feedback .section-header h2 {
+            color: var(--white);
+        }
+        #feedback .section-header p {
+            color: rgba(255, 255, 255, 0.6);
+        }
+        #feedback .section-header .tag {
+            background: rgba(201, 168, 76, 0.2);
+        }
+        .swiper {
+            padding: 20px 10px 60px;
+        }
+        .swiper-slide {
+            height: auto;
+        }
+        .testimonial-card {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: var(--radius-lg);
+            padding: 36px 30px;
+            backdrop-filter: blur(10px);
+            text-align: center;
+            transition: var(--transition);
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .testimonial-card:hover {
+            border-color: rgba(201, 168, 76, 0.3);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+        }
+        .testimonial-avatar {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            background: var(--accent);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            font-weight: 700;
+            color: #0a0a0a;
+            margin-bottom: 16px;
+            letter-spacing: 1px;
+        }
+        .testimonial-stars {
+            color: #f5c542;
+            font-size: 16px;
+            margin-bottom: 14px;
+            letter-spacing: 3px;
+        }
+        .testimonial-card p {
+            color: rgba(255, 255, 255, 0.75);
+            font-style: italic;
+            font-size: 15px;
+            line-height: 1.7;
+            flex: 1;
+        }
+        .testimonial-card h4 {
+            color: var(--white);
+            margin-top: 16px;
+            font-weight: 600;
+            font-size: 16px;
+        }
+        .testimonial-card .role {
+            color: var(--accent);
+            font-size: 12px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+        .swiper-pagination-bullet {
+            background: rgba(255, 255, 255, 0.4);
+            opacity: 1;
+            width: 10px;
+            height: 10px;
+            transition: var(--transition);
+        }
+        .swiper-pagination-bullet-active {
+            background: var(--accent);
+            width: 28px;
+            border-radius: 5px;
+        }
+
+        /* ========== CONTACT SECTION ========== */
+        #contact {
+            background: var(--white);
+        }
+        .contact-grid {
+            display: grid;
+            grid-template-columns: 1fr 1.2fr;
+            gap: 50px;
+        }
+        .contact-info {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+        .contact-info-card {
+            display: flex;
+            align-items: flex-start;
+            gap: 16px;
+            background: var(--gray-100);
+            padding: 22px 24px;
+            border-radius: var(--radius);
+            transition: var(--transition);
+            border: 1px solid transparent;
+        }
+        .contact-info-card:hover {
+            border-color: rgba(201, 168, 76, 0.3);
+            box-shadow: var(--shadow-md);
+        }
+        .contact-info-card .icon-circle {
+            width: 48px;
+            height: 48px;
+            min-width: 48px;
+            background: var(--accent);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #0a0a0a;
+            font-size: 20px;
+        }
+        .contact-info-card h4 {
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 2px;
+            font-size: 15px;
+        }
+        .contact-info-card p {
+            color: var(--gray-600);
+            font-size: 14px;
+            margin: 0;
+        }
+        .contact-form-wrapper {
+            background: var(--gray-100);
+            border-radius: var(--radius-lg);
+            padding: 36px 32px;
+            box-shadow: var(--shadow-md);
+        }
+        .contact-form-wrapper h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 26px;
+            margin-bottom: 20px;
+            color: var(--primary);
+        }
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+            margin-bottom: 14px;
+        }
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            margin-bottom: 14px;
+        }
+        .form-group label {
+            font-weight: 500;
+            font-size: 13px;
+            color: var(--gray-800);
+            letter-spacing: 0.5px;
+        }
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            background: var(--white);
+            border: 2px solid var(--gray-300);
+            border-radius: var(--radius-sm);
+            padding: 13px 16px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 14px;
+            transition: var(--transition);
+            outline: none;
+            resize: vertical;
+            width: 100%;
+        }
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 4px rgba(201, 168, 76, 0.08);
+        }
+        .btn-submit {
+            background: var(--accent);
+            color: #0a0a0a;
+            border: none;
+            padding: 15px 36px;
+            border-radius: 50px;
+            font-weight: 700;
+            cursor: pointer;
+            letter-spacing: 0.5px;
+            transition: var(--transition);
+            font-family: 'Poppins', sans-serif;
+            font-size: 15px;
+            width: 100%;
+        }
+        .btn-submit:hover {
+            background: var(--accent-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(201, 168, 76, 0.35);
+        }
+
+        /* ========== FOOTER ========== */
+        footer {
+            background: #0a0a12;
+            color: rgba(255, 255, 255, 0.7);
+            padding: 60px 0 20px;
+        }
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1.2fr;
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+        .footer-col h4 {
+            color: var(--white);
+            font-weight: 600;
+            margin-bottom: 18px;
+            font-size: 16px;
+            letter-spacing: 0.5px;
+        }
+        .footer-col ul {
+            list-style: none;
+        }
+        .footer-col ul li {
+            margin-bottom: 10px;
+        }
+        .footer-col ul li a {
+            color: rgba(255, 255, 255, 0.55);
+            text-decoration: none;
+            transition: var(--transition);
+            font-size: 14px;
+        }
+        .footer-col ul li a:hover {
+            color: var(--accent);
+            padding-left: 5px;
+        }
+        .footer-col p {
+            font-size: 14px;
+            line-height: 1.8;
+            color: rgba(255, 255, 255, 0.5);
+        }
+        .footer-logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 26px;
+            font-weight: 800;
+            color: var(--white);
+            margin-bottom: 12px;
+            display: block;
+        }
+        .footer-logo span {
+            color: var(--accent);
+        }
+        .social-links {
+            display: flex;
+            gap: 12px;
+            margin-top: 16px;
+        }
+        .social-links a {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.06);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: rgba(255, 255, 255, 0.7);
+            transition: var(--transition);
+            font-size: 16px;
+            text-decoration: none;
+        }
+        .social-links a:hover {
+            background: var(--accent);
+            color: #0a0a0a;
+            transform: translateY(-3px);
+        }
+        .footer-bottom {
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+            padding-top: 20px;
+            text-align: center;
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.35);
+        }
+
+        /* ========== BACK TO TOP ========== */
+        .back-to-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 48px;
+            height: 48px;
+            background: var(--accent);
+            color: #0a0a0a;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 999;
+            border: none;
+            font-size: 20px;
+            box-shadow: var(--shadow-md);
+            transition: var(--transition);
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(20px);
+        }
+        .back-to-top.show {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+        .back-to-top:hover {
+            background: var(--accent-hover);
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        /* ========== RESPONSIVE ========== */
+        @media (max-width: 1024px) {
+            .hero .container {
+                grid-template-columns: 1fr;
+                text-align: center;
+                gap: 40px;
+            }
+            .hero-content p {
+                margin: 0 auto 30px;
+            }
+            .hero-stats {
+                justify-content: center;
+            }
+            .about-grid {
+                grid-template-columns: 1fr;
+            }
+            .about-badge {
+                right: 10px;
+                bottom: -20px;
+                padding: 16px 20px;
+            }
+            .about-badge .number {
+                font-size: 30px;
+            }
+            .contact-grid {
+                grid-template-columns: 1fr;
+            }
+            .footer-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+        @media (max-width: 768px) {
+            .nav-links {
+                position: fixed;
+                top: 0;
+                right: -100%;
+                width: 280px;
+                height: 100vh;
+                background: rgba(10, 10, 18, 0.98);
+                backdrop-filter: blur(30px);
+                flex-direction: column;
+                justify-content: center;
+                gap: 28px;
+                transition: var(--transition-slow);
+                z-index: 1000;
+            }
+            .nav-links.active {
+                right: 0;
+            }
+            .hamburger {
+                display: flex;
+            }
+            .hero-booking-card {
+                padding: 24px 20px;
+            }
+            .booking-form-row {
+                grid-template-columns: 1fr;
+            }
+            .services-grid {
+                grid-template-columns: 1fr;
+            }
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+            .footer-grid {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+            .about-features {
+                grid-template-columns: 1fr;
+            }
+            .hero-stats {
+                gap: 20px;
+                flex-wrap: wrap;
+            }
+            .hero-stat h3 {
+                font-size: 26px;
+            }
+        }
+        @media (max-width: 480px) {
+            .navbar .container {
+                padding: 0 16px;
+            }
+            .container {
+                padding: 0 16px;
+            }
+            .hero-content h1 {
+                font-size: 32px;
+            }
+            .hero-booking-card {
+                padding: 20px 16px;
+            }
+            .section {
+                padding: 60px 0;
+            }
+            .about-content h2 {
+                font-size: 28px;
+            }
+            .contact-form-wrapper {
+                padding: 24px 18px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Preloader -->
+    <div class="preloader" id="preloader">
+        <div style="text-align:center;">
+            <div class="car-loader"><i class="fa-solid fa-car-side"></i></div>
+            <div class="road-line"></div>
+        </div>
+    </div>
+
+    <!-- Navbar -->
+    <nav class="navbar" id="navbar">
+        <div class="container">
+            <a href="#" class="logo">
+                <i class="fa-solid fa-steering-wheel logo-icon"></i>
+                <span class="logo-text">Drive<span>Lux</span></span>
+            </a>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="#home" onclick="closeMenu()">Home</a></li>
+                <li><a href="#about" onclick="closeMenu()">About</a></li>
+                <li><a href="#services" onclick="closeMenu()">Services</a></li>
+                <li><a href="#feedback" onclick="closeMenu()">Reviews</a></li>
+                <li><a href="#contact" onclick="closeMenu()">Contact</a></li>
+                <li><a href="#contact" class="nav-cta" onclick="closeMenu()">Book Now</a></li>
+            </ul>
+            <div class="hamburger" id="hamburger" onclick="toggleMenu()">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="hero-bg-overlay"></div>
+        <div class="hero-particles" id="heroParticles"></div>
+        <div class="container">
+            <div class="hero-content">
+                <h4>✦ Premium Car Rentals</h4>
+                <h1>Drive Your <span>Dream</span> Car Today</h1>
+                <p>Experience the thrill of luxury vehicles at affordable prices. Book in minutes, drive in style. Your journey begins with DriveLux.</p>
+                <div class="hero-stats">
+                    <div class="hero-stat">
+                        <h3>500+</h3>
+                        <p>Luxury Vehicles</p>
+                    </div>
+                    <div class="hero-stat">
+                        <h3>50k+</h3>
+                        <p>Happy Clients</p>
+                    </div>
+                    <div class="hero-stat">
+                        <h3>24/7</h3>
+                        <p>Support</p>
+                    </div>
+                </div>
+            </div>
+            <div class="hero-booking-card">
+                <h3>Book Your Car</h3>
+                <p class="subtitle">Reserve in under 60 seconds</p>
+                <form id="heroBookingForm">
+                    <div class="booking-form-row">
+                        <div class="booking-form-group">
+                            <label>Pick-Up Date</label>
+                            <input type="date" id="pickupDate" required>
+                        </div>
+                        <div class="booking-form-group">
+                            <label>Return Date</label>
+                            <input type="date" id="returnDate" required>
+                        </div>
+                    </div>
+                    <div class="booking-form-row">
+                        <div class="booking-form-group">
+                            <label>Car Type</label>
+                            <select id="carType" required>
+                                <option value="">Select Car</option>
+                                <option value="sedan">Luxury Sedan</option>
+                                <option value="suv">Premium SUV</option>
+                                <option value="sports">Sports Car</option>
+                                <option value="convertible">Convertible</option>
+                                <option value="electric">Electric</option>
+                            </select>
+                        </div>
+                        <div class="booking-form-group">
+                            <label>Location</label>
+                            <select id="location" required>
+                                <option value="">Pick Location</option>
+                                <option value="nyc">New York City</option>
+                                <option value="la">Los Angeles</option>
+                                <option value="miami">Miami</option>
+                                <option value="chicago">Chicago</option>
+                                <option value="sf">San Francisco</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="booking-form-row full">
+                        <div class="booking-form-group">
+                            <label>Full Name</label>
+                            <input type="text" placeholder="Enter your full name" id="heroName" required>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn-book-now">
+                        <i class="fa-solid fa-calendar-check"></i> &nbsp;Book Now
+                    </button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section class="section" id="about">
+        <div class="container">
+            <div class="section-header">
+                <span class="tag">About Us</span>
+                <h2>Redefining Car Rentals</h2>
+                <p>We are committed to delivering unparalleled driving experiences with a fleet of meticulously maintained vehicles.</p>
+            </div>
+            <div class="about-grid">
+                <div class="about-image-wrapper">
+                    <div class="about-image">
+                        <i class="fa-solid fa-car"></i>
+                    </div>
+                    <div class="about-badge">
+                        <span class="number">15+</span>
+                        <span class="label">Years Exp.</span>
+                    </div>
+                </div>
+                <div class="about-content">
+                    <h2>Experience the <span>DriveLux</span> Difference</h2>
+                    <p>Founded in 2009, DriveLux has grown from a small garage to one of the most trusted car rental platforms nationwide. We believe renting a car should be as exhilarating as driving one.</p>
+                    <p>Our team handpicks every vehicle in our fleet, ensuring top-tier performance, safety, and style. Whether you need a sleek sedan for a business trip or a roaring sports car for a weekend getaway — we've got you covered.</p>
+                    <ul class="about-features">
+                        <li><i class="fa-solid fa-circle-check"></i> Fully Insured Vehicles</li>
+                        <li><i class="fa-solid fa-circle-check"></i> 24/7 Roadside Assistance</li>
+                        <li><i class="fa-solid fa-circle-check"></i> No Hidden Fees</li>
+                        <li><i class="fa-solid fa-circle-check"></i> Free Cancellation</li>
+                    </ul>
+                    <a href="#services" class="btn-outline">Explore Services <i class="fa-solid fa-arrow-right"></i></a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section class="section" id="services">
+        <div class="container">
+            <div class="section-header">
+                <span class="tag">Our Services</span>
+                <h2>Choose Your Ride</h2>
+                <p>From economy to ultra-luxury, find the perfect vehicle for every occasion.</p>
+            </div>
+            <div class="services-grid">
+                <div class="service-card">
+                    <div class="service-icon"><i class="fa-solid fa-car"></i></div>
+                    <h3>Luxury Sedans</h3>
+                    <p>Refined, comfortable, and perfect for business travel or city cruising. Top brands like Mercedes & BMW.</p>
+                    <span class="price-tag">From $89/day</span>
+                </div>
+                <div class="service-card">
+                    <div class="service-icon"><i class="fa-solid fa-truck"></i></div>
+                    <h3>Premium SUVs</h3>
+                    <p>Spacious and powerful. Ideal for family trips, group travel, or exploring rugged terrains in comfort.</p>
+                    <span class="price-tag">From $129/day</span>
+                </div>
+                <div class="service-card">
+                    <div class="service-icon"><i class="fa-solid fa-car-side"></i></div>
+                    <h3>Sports Cars</h3>
+                    <p>Unleash the beast. Experience adrenaline-pumping performance with our exotic sports car collection.</p>
+                    <span class="price-tag">From $249/day</span>
+                </div>
+                <div class="service-card">
+                    <div class="service-icon"><i class="fa-solid fa-crown"></i></div>
+                    <h3>Ultra Luxury</h3>
+                    <p>Rolls-Royce, Bentley, Maybach — for those who accept nothing but the absolute finest in motoring.</p>
+                    <span class="price-tag">From $599/day</span>
+                </div>
+                <div class="service-card">
+                    <div class="service-icon"><i class="fa-solid fa-bolt"></i></div>
+                    <h3>Electric Fleet</h3>
+                    <p>Sustainable driving without compromise. Tesla, Lucid, and Porsche EV models available for eco-conscious drivers.</p>
+                    <span class="price-tag">From $99/day</span>
+                </div>
+                <div class="service-card">
+                    <div class="service-icon"><i class="fa-solid fa-calendar-check"></i></div>
+                    <h3>Chauffeur Service</h3>
+                    <p>Sit back and relax. Professional chauffeurs for events, airport transfers, and special occasions.</p>
+                    <span class="price-tag">From $199/day</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Feedback / Testimonials Section -->
+    <section class="section" id="feedback">
+        <div class="container">
+            <div class="section-header">
+                <span class="tag">Testimonials</span>
+                <h2>What Our Clients Say</h2>
+                <p>Real stories from real drivers who experienced the DriveLux difference.</p>
+            </div>
+            <div class="swiper" id="testimonialSwiper">
+                <div class="swiper-wrapper">
+                    <div class="swiper-slide">
+                        <div class="testimonial-card">
+                            <div class="testimonial-avatar">J</div>
+                            <div class="testimonial-stars">★★★★★</div>
+                            <p>"The booking process was incredibly smooth. I picked up a gorgeous Mercedes S-Class within 30 minutes. The car was spotless and drove like a dream. Highly recommended!"</p>
+                            <h4>James Carter</h4>
+                            <span class="role">Business Executive</span>
+                        </div>
+                    </div>
+                    <div class="swiper-slide">
+                        <div class="testimonial-card">
+                            <div class="testimonial-avatar">S</div>
+                            <div class="testimonial-stars">★★★★★</div>
+                            <p>"I rented a Porsche 911 for my husband's birthday surprise. DriveLux made it so special — they even added a ribbon! The car was immaculate. We'll be back for sure."</p>
+                            <h4>Sophia Martinez</h4>
+                            <span class="role">Loyal Customer</span>
+                        </div>
+                    </div>
+                    <div class="swiper-slide">
+                        <div class="testimonial-card">
+                            <div class="testimonial-avatar">D</div>
+                            <div class="testimonial-stars">★★★★★</div>
+                            <p>"As a frequent traveler, I've tried many rental services. DriveLux stands out with their transparency, no hidden charges, and exceptional customer support available 24/7."</p>
+                            <h4>David Okonkwo</h4>
+                            <span class="role">Travel Blogger</span>
+                        </div>
+                    </div>
+                    <div class="swiper-slide">
+                        <div class="testimonial-card">
+                            <div class="testimonial-avatar">L</div>
+                            <div class="testimonial-stars">★★★★★</div>
+                            <p>"The Tesla Model S Plaid I rented was incredible. The electric fleet options are a game-changer. Fast, silent, and the charging network support was very helpful."</p>
+                            <h4>Lisa Chen</h4>
+                            <span class="role">Tech Entrepreneur</span>
+                        </div>
+                    </div>
+                    <div class="swiper-slide">
+                        <div class="testimonial-card">
+                            <div class="testimonial-avatar">M</div>
+                            <div class="testimonial-stars">★★★★★</div>
+                            <p>"Chauffeur service for our wedding was flawless. The Rolls-Royce arrived early, the driver was in a sharp suit, and the entire experience made our day even more magical."</p>
+                            <h4>Michael & Sarah</h4>
+                            <span class="role">Newlyweds</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="swiper-pagination"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section class="section" id="contact">
+        <div class="container">
+            <div class="section-header">
+                <span class="tag">Get In Touch</span>
+                <h2>Contact Us</h2>
+                <p>Have questions? Need a custom quote? We're here to help 24/7.</p>
+            </div>
+            <div class="contact-grid">
+                <div class="contact-info">
+                    <div class="contact-info-card">
+                        <div class="icon-circle"><i class="fa-solid fa-location-dot"></i></div>
+                        <div>
+                            <h4>Head Office</h4>
+                            <p>350 Park Avenue, Midtown<br>New York, NY 10022</p>
+                        </div>
+                    </div>
+                    <div class="contact-info-card">
+                        <div class="icon-circle"><i class="fa-solid fa-phone"></i></div>
+                        <div>
+                            <h4>Call Us</h4>
+                            <p>+1 (212) 555-0890<br>Toll-Free: 1-800-DRIVELUX</p>
+                        </div>
+                    </div>
+                    <div class="contact-info-card">
+                        <div class="icon-circle"><i class="fa-solid fa-envelope"></i></div>
+                        <div>
+                            <h4>Email</h4>
+                            <p>info@drivelux.com<br>support@drivelux.com</p>
+                        </div>
+                    </div>
+                    <div class="contact-info-card">
+                        <div class="icon-circle"><i class="fa-solid fa-clock"></i></div>
+                        <div>
+                            <h4>Working Hours</h4>
+                            <p>Mon - Sun: 24 Hours<br>Always Open</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="contact-form-wrapper">
+                    <h3>Send a Message</h3>
+                    <form id="contactForm">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>First Name *</label>
+                                <input type="text" placeholder="John" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Last Name *</label>
+                                <input type="text" placeholder="Doe" required>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Email Address *</label>
+                                <input type="email" placeholder="john@example.com" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Phone Number</label>
+                                <input type="tel" placeholder="+1 (555) 000-0000">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Subject *</label>
+                            <select required>
+                                <option value="">Select a topic</option>
+                                <option value="booking">Booking Inquiry</option>
+                                <option value="support">Customer Support</option>
+                                <option value="quote">Custom Quote</option>
+                                <option value="feedback">Feedback</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Message *</label>
+                            <textarea rows="4" placeholder="Tell us how we can help..." required></textarea>
+                        </div>
+                        <button type="submit" class="btn-submit">
+                            <i class="fa-solid fa-paper-plane"></i> &nbsp;Send Message
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <span class="footer-logo">Drive<span>Lux</span></span>
+                    <p>Premium car rental service delivering luxury, performance, and reliability since 2009. Drive with confidence.</p>
+                    <div class="social-links">
+                        <a href="#" aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
+                        <a href="#" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+                        <a href="#" aria-label="Twitter"><i class="fa-brands fa-x-twitter"></i></a>
+                        <a href="#" aria-label="LinkedIn"><i class="fa-brands fa-linkedin-in"></i></a>
+                        <a href="#" aria-label="YouTube"><i class="fa-brands fa-youtube"></i></a>
+                    </div>
+                </div>
+                <div class="footer-col">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="#home">Home</a></li>
+                        <li><a href="#about">About Us</a></li>
+                        <li><a href="#services">Services</a></li>
+                        <li><a href="#feedback">Reviews</a></li>
+                        <li><a href="#contact">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Services</h4>
+                    <ul>
+                        <li><a href="#">Luxury Sedans</a></li>
+                        <li><a href="#">Premium SUVs</a></li>
+                        <li><a href="#">Sports Cars</a></li>
+                        <li><a href="#">Electric Fleet</a></li>
+                        <li><a href="#">Chauffeur Service</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Newsletter</h4>
+                    <p>Subscribe for exclusive deals and new arrivals.</p>
+                    <form style="display:flex;gap:8px;margin-top:12px;" id="newsletterForm">
+                        <input type="email" placeholder="Your email" style="flex:1;padding:12px 16px;border-radius:50px;border:none;outline:none;font-family:'Poppins',sans-serif;font-size:13px;" required>
+                        <button type="submit" style="background:var(--accent);color:#0a0a0a;border:none;padding:12px 18px;border-radius:50px;cursor:pointer;font-weight:600;font-family:'Poppins',sans-serif;white-space:nowrap;font-size:13px;">Subscribe</button>
+                    </form>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 DriveLux. All rights reserved. | Privacy Policy | Terms of Service | Designed with <i class="fa-solid fa-heart" style="color:#e74c3c;"></i> by DriveLux Team</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Back to Top -->
+    <button class="back-to-top" id="backToTop" aria-label="Back to top">
+        <i class="fa-solid fa-chevron-up"></i>
+    </button>
+
+    <!-- Swiper JS -->
+    <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js">
+    </script>
+
+    <script>
+        // ============ PRELOADER ============
+        window.addEventListener('load', () => {
+            const preloader = document.getElementById('preloader');
+            preloader.classList.add('hidden');
+            setTimeout(() => { preloader.style.display = 'none'; }, 600);
+        });
+
+        // ============ NAVBAR SCROLL EFFECT ============
+        const navbar = document.getElementById('navbar');
+        const backToTop = document.getElementById('backToTop');
+
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 60) {
+                navbar.classList.add('scrolled');
+                backToTop.classList.add('show');
+            } else {
+                navbar.classList.remove('scrolled');
+                backToTop.classList.remove('show');
+            }
+        });
+
+        // ============ MOBILE MENU ============
+        const hamburger = document.getElementById('hamburger');
+        const navLinks = document.getElementById('navLinks');
+
+        function toggleMenu() {
+            hamburger.classList.toggle('active');
+            navLinks.classList.toggle('active');
+        }
+
+        function closeMenu() {
+            hamburger.classList.remove('active');
+            navLinks.classList.remove('active');
+        }
+
+        // Close menu on outside click
+        document.addEventListener('click', (e) => {
+            if (!navLinks.contains(e.target) && !hamburger.contains(e.target) && navLinks.classList.contains(
+                    'active')) {
+                closeMenu();
+            }
+        });
+
+        // ============ BACK TO TOP ============
+        backToTop.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
+        // ============ HERO PARTICLES ============
+        const particlesContainer = document.getElementById('heroParticles');
+        for (let i = 0; i < 35; i++) {
+            const particle = document.createElement('div');
+            particle.classList.add('particle');
+            const size = Math.random() * 4 + 2;
+            particle.style.width = size + 'px';
+            particle.style.height = size + 'px';
+            particle.style.left = Math.random() * 100 + '%';
+            particle.style.animationDuration = Math.random() * 15 + 10 + 's';
+            particle.style.animationDelay = Math.random() * 12 + 's';
+            particle.style.opacity = Math.random() * 0.5 + 0.1;
+            particlesContainer.appendChild(particle);
+        }
+
+        // ============ SWIPER TESTIMONIALS ============
+        const swiper = new Swiper('#testimonialSwiper', {
+            slidesPerView: 1,
+            spaceBetween: 24,
+            loop: true,
+            autoplay: {
+                delay: 4000,
+                disableOnInteraction: false,
+            },
+            pagination: {
+                el: '.swiper-pagination',
+                clickable: true,
+            },
+            breakpoints: {
+                640: { slidesPerView: 1 },
+                768: { slidesPerView: 2 },
+                1024: { slidesPerView: 3 },
+            },
+        });
+
+        // ============ FORM HANDLING ============
+        // Hero Booking Form
+        document.getElementById('heroBookingForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const name = document.getElementById('heroName').value;
+            const carType = document.getElementById('carType').value;
+            const pickupDate = document.getElementById('pickupDate').value;
+            const returnDate = document.getElementById('returnDate').value;
+            const location = document.getElementById('location').value;
+
+            if (!name || !carType || !pickupDate || !returnDate || !location) {
+                alert('Please fill in all fields to complete your booking.');
+                return;
+            }
+            if (new Date(returnDate) <= new Date(pickupDate)) {
+                alert('Return date must be after pick-up date.');
+                return;
+            }
+            alert(
+                `✅ Thank you, ${name}!\n\nYour ${carType.toUpperCase()} is reserved from ${pickupDate} to ${returnDate} in ${location.toUpperCase()}.\n\nWe'll send a confirmation email shortly.\n\n— DriveLux Team`);
+            this.reset();
+        });
+
+        // Contact Form
+        document.getElementById('contactForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const inputs = this.querySelectorAll('input, textarea, select');
+            let allFilled = true;
+            inputs.forEach(input => {
+                if (input.hasAttribute('required') && !input.value.trim()) {
+                    allFilled = false;
+                }
+            });
+            if (!allFilled) {
+                alert('Please fill in all required fields.');
+                return;
+            }
+            alert(
+                '✅ Message sent successfully!\n\nOur team will get back to you within 2 hours.\n\n— DriveLux Support');
+            this.reset();
+        });
+
+        // Newsletter Form
+        document.getElementById('newsletterForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const email = this.querySelector('input[type="email"]').value;
+            if (email) {
+                alert(`🎉 Subscribed successfully!\n\nWelcome aboard, ${email}.\nExpect exclusive deals in your inbox soon!`);
+                this.reset();
+            }
+        });
+
+        // ============ SMOOTH SCROLL FOR ALL ANCHOR LINKS ============
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                const targetId = this.getAttribute('href');
+                if (targetId === '#') return;
+                const target = document.querySelector(targetId);
+                if (target) {
+                    e.preventDefault();
+                    const offset = 75;
+                    const position = target.getBoundingClientRect().top + window.pageYOffset - offset;
+                    window.scrollTo({ top: position, behavior: 'smooth' });
+                }
+            });
+        });
+
+        // ============ ANIMATION ON SCROLL ============
+        const observerOptions = { threshold: 0.15, rootMargin: '0px 0px -40px 0px' };
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll(
+            '.service-card, .testimonial-card, .about-content, .contact-info-card, .section-header').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(30px)';
+            el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+            observer.observe(el);
+        });
+
+        // ============ SET MIN DATE FOR DATE INPUTS ============
+        const today = new Date().toISOString().split('T')[0];
+        document.getElementById('pickupDate').setAttribute('min', today);
+        document.getElementById('returnDate').setAttribute('min', today);
+        document.getElementById('pickupDate').addEventListener('change', function() {
+            document.getElementById('returnDate').setAttribute('min', this.value);
+            if (document.getElementById('returnDate').value < this.value) {
+                document.getElementById('returnDate').value = this.value;
+            }
+        });
+
+        console.log('%c🚗 DriveLux %cPremium Car Booking %cReady',
+            'font-size:24px;color:#c9a84c;font-weight:bold;',
+            'font-size:16px;color:#fff;',
+            'font-size:14px;color:#4ade80;');
+        console.log('%cAll systems go. Happy driving! 🏁', 'color:#c9a84c;font-size:13px;');
+    </script>
+</body>
+</html>
